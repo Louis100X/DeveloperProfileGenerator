@@ -170,6 +170,11 @@ const colors = {
               zoom: .75; 
             } 
            }
-        </style>`
+        </style>
+        
+        
+        </head>
+        <body>
+        </body>`
           }
           module.exports= generateHTML
