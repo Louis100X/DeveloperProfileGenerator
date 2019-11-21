@@ -7,6 +7,10 @@ const util = require("util");
 const writeFileAsync = util.promisify(fs.writeFile);
 
 
+var pdf = require('html-pdf');
+// var html = fs.readFileSync('./index.html', 'utf8');
+// var options = { format: 'Letter' };
+
 const questions = [
 
 ];
@@ -33,32 +37,33 @@ function init() {
     ]).then(function (response) {
         console.log(response)
         const queryUrl = `https://api.github.com/users/${response.gitHub}`;
-        axios.get(queryUrl).then(function (gitData) {
+        return axios.get(queryUrl).then(function (gitData) {
             console.log(gitData.data);
-            gitData.data.color = response.color;
-            const hTML = generateHTML(gitData.data);
-            console.log(hTML);
-            console.log(gitData.data.login);
-            console.log(gitData.data.location);
-            console.log(gitData.data.blog);
-            console.log(gitData.data.html_url);
-            console.log(gitData.data.bio);
-            console.log(gitData.data.public_repos);
-            console.log(gitData.data.followers);
-            console.log(gitData.data.following);
+            const hTML = generateHTML(response , gitData);
+            return writeFileAsync("index.html", hTML);
         })
+        .then(function () {
+            var html = fs.readFileSync('./index.html', 'UTF-8');
+            var options = { format: 'Letter' };
+            return pdf.create(html, options).toFile('./index.pdf', function (err, res) {
+                if (err)
+                    return console.log(err);
+                console.log(res); 
+            })
+        })
+        .then(function () {
+            console.log("Successfully wrote to index.html");
+        })
+        .catch(function (err) {
+            console.log(err);
+        });
+
+
+
+        
     });
 }
 
-init()
-  .then(function(answers) {
-    const html = generateHTML(answers);
 
-    return writeFileAsync("index.html", html);
-  })
-  .then(function() {
-    console.log("Successfully wrote to index.html");
-  })
-  .catch(function(err) {
-    console.log(err);
-  });;
+
+init();
