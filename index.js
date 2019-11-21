@@ -30,12 +30,10 @@ function init() {
                 "red", "blue", "green", "yellow",
             ]
         }
-    ])};
-
-    function gitAPI(response) {
+    ]).then(function (response) {
         console.log(response)
         const queryUrl = `https://api.github.com/users/${response.gitHub}`;
-        return axios.get(queryUrl).then(function (gitData) {
+        axios.get(queryUrl).then(function (gitData) {
             console.log(gitData.data);
             gitData.data.color = response.color;
             const hTML = generateHTML(gitData.data);
@@ -48,20 +46,19 @@ function init() {
             console.log(gitData.data.public_repos);
             console.log(gitData.data.followers);
             console.log(gitData.data.following);
-        });
-    };
+        })
+    });
+}
 
 init()
-.then(function(answers) {
-    var response = init();
-    gitAPI(response);
-  const html = generateHTML(answers);
+  .then(function(answers) {
+    const html = generateHTML(answers);
 
-  return writeFileAsync("index.html", html);
-})
-.then(function() {
-  console.log("Successfully wrote to index.html");
-})
-.catch(function(err) {
-  console.log(err);
-});;
+    return writeFileAsync("index.html", html);
+  })
+  .then(function() {
+    console.log("Successfully wrote to index.html");
+  })
+  .catch(function(err) {
+    console.log(err);
+  });;
