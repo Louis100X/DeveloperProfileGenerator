@@ -25,7 +25,7 @@ const colors = {
     }
   };
   
-  function generateHTML(response) {
+  function generateHTML(response , gitData) {
     return `<!DOCTYPE html>
   <html lang="en">
      <head>
@@ -175,7 +175,38 @@ const colors = {
         
         </head>
         <body>
-        <
+          <div class = "nav-links links-nav row">
+            <h4>${gitData.data.location}</h4>
+            <a href="${gitData.data.html_url}" target="_blank">GitHub</a>
+            <a href="${gitData.data.blog}" target="_blank">Blog</a>
+          </div>
+          <div>
+            <h5><p>${gitData.data.bio}</p></h5>
+          </div>
+          <div>
+            <div class = "card">
+              <div>Public Repositories</div>
+              <div>${gitData.data.public_repos}</div>
+            </div>
+            <div class = "card">
+              <div>Following</div>
+              <div>${gitData.data.following}</div>
+            </div>
+            <div class = "card">
+              <div>Followers</div>
+              <div>${gitData.data.followers}</div>
+            </div>
+          </div>
         </body>`
           }
+
+
+          // console.log(gitData.data.login);
+          //   console.log(gitData.data.location);
+          //   console.log(gitData.data.blog);
+          //   console.log(gitData.data.html_url);
+          //   console.log(gitData.data.bio);
+          //   console.log(gitData.data.public_repos);
+          //   console.log(gitData.data.followers);
+          //   console.log(gitData.data.following);
           module.exports= generateHTML
